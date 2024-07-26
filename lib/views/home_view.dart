@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import "dart:developer" as devtools show log;
 
+import 'package:my_notes/constants/routes.dart';
+
 enum MenuAction { logout }
 
 class HomeView extends StatelessWidget {
@@ -15,7 +17,6 @@ class HomeView extends StatelessWidget {
       fontWeight: FontWeight.bold,
     ),
   );
-  final String registerRoute = "/register";
   final Text loginButton = const Text(
     "Login here",
     style: TextStyle(
@@ -23,7 +24,6 @@ class HomeView extends StatelessWidget {
       fontWeight: FontWeight.bold,
     ),
   );
-  final String loginRoute = "/login";
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class HomeView extends StatelessWidget {
                   if (shouldLogout) {
                     await FirebaseAuth.instance.signOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                      "/login",
+                      loginRoute,
                       (_) => false,
                     );
                   }

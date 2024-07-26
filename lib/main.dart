@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_notes/constants/routes.dart';
 import 'package:my_notes/views/home_view.dart';
 import 'package:my_notes/views/login_view.dart';
+import 'package:my_notes/views/notes_view.dart';
 import "package:my_notes/views/register_view.dart";
 import 'package:my_notes/views/verify_email_view.dart';
 
@@ -13,8 +15,9 @@ void main() {
   runApp(MaterialApp(
       initialRoute: "/",
       routes: {
-        "/login": (context) => const LoginView(),
-        "/register": (context) => const RegisterView(),
+        notesRoute: (context) => const NotesView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
         "/verify-email": (context) => const VerifyEmailView(),
       },
       home: const HomeView()));
