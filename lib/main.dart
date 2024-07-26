@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print, use_super_parameters, library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,12 +11,16 @@ import 'package:my_notes/views/verify_email_view.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
+      title: "Flutter Notes App",
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
       initialRoute: "/",
       routes: {
         notesRoute: (context) => const NotesView(),
         loginRoute: (context) => const LoginView(),
         registerRoute: (context) => const RegisterView(),
-        "/verify-email": (context) => const VerifyEmailView(),
+        verifyEmailRoute: (context) => const VerifyEmailView(),
       },
       home: const HomeView()));
 }
