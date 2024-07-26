@@ -40,14 +40,15 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
       body: FutureBuilder(
-          future: Firebase.initializeApp(
-              // options: DefaultFirebaseOptions.currentPlataform;
-              ),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.done:
-                return Center(
-                  child: Column(children: [
+        future: Firebase.initializeApp(
+            // options: DefaultFirebaseOptions.currentPlataform;
+            ),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              return Center(
+                child: Column(
+                  children: [
                     TextField(
                       controller: _email,
                       enableSuggestions: false,
@@ -73,10 +74,19 @@ class _LoginViewState extends State<LoginView> {
                           await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                                   email: email, password: password);
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            notesRoute,
-                            (route) => false,
-                          );
+                          final user = FirebaseAuth.instance.currentUser;
+                          if (user?.emailVerified ?? false) {
+                            // email is verified already
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                              notesRoute,
+                              (route) => false,
+                            );
+                          } else {
+                            // email is not verified yet
+                            Navigator.of(context).pushNamed(
+                              verifyEmailRoute,
+                            );
+                          }
                         } on FirebaseAuthException catch (e) {
                           if (e.code == "user-not-found") {
                             await showErrorDialog(
@@ -104,16 +114,19 @@ class _LoginViewState extends State<LoginView> {
                       child: const Text("Login"),
                     ),
                     TextButton(
-                        onPressed: () {
-                          Navigator.of(context).popAndPushNamed(registerRoute);
-                        },
-                        child: const Text("No account? Register Here"))
-                  ]),
-                );
-              default:
-                return const Text('loading');
-            }
-          }),
+                      onPressed: () {
+                        Navigator.of(context).popAndPushNamed(registerRoute);
+                      },
+                      child: const Text("No account? Register Here"),
+                    ),
+                  ],
+                ),
+              );
+            default:
+              return const Text('loading');
+          }
+        },
+      ),
     );
   }
 }
