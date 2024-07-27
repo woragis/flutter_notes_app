@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:my_notes/constants/routes.dart';
+import 'package:my_notes/services/auth/auth_service.dart';
 import 'package:my_notes/views/home_view.dart';
 import 'package:my_notes/views/login_view.dart';
 import 'package:my_notes/views/notes_view.dart';
@@ -40,19 +39,19 @@ class _MainState extends State<Main> {
         title: const Text("Home"),
       ),
       body: FutureBuilder(
-          future: Firebase.initializeApp(
-              // options: DefaultFirebaseOptions.currentPlataform;
-              ),
+          future: AuthService.firebase().initialize(),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case (ConnectionState.done):
-                final user = FirebaseAuth.instance.currentUser;
-                if (user?.emailVerified ?? false) {
-                  print("You are verified");
-                } else {
-                  print("You need to verify your email");
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      "/verify-email", (route) => false);
+                final user = AuthService.firebase().currentUser;
+                if (user != null) {
+                  if (user.isEmailVerified) {
+                    print("You are verified");
+                  } else {
+                    print("You need to verify your email");
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        "/verify-email", (route) => false);
+                  }
                 }
                 return const Text("Done");
               default:
